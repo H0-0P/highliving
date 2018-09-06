@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.ParamMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.Param" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="goodId" property="goodid" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.highliving.pojo.Param" extends="BaseResultMap" >
+    <result column="param" property="param" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, goodId
+  </sql>
+  <sql id="Blob_Column_List" >
+    param
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from param
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from param
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.Param" >
+    insert into param (id, goodId, param
+      )
+    values (#{id,jdbcType=INTEGER}, #{goodid,jdbcType=VARCHAR}, #{param,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.Param" >
+    insert into param
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="goodid != null" >
+        goodId,
+      </if>
+      <if test="param != null" >
+        param,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="goodid != null" >
+        #{goodid,jdbcType=VARCHAR},
+      </if>
+      <if test="param != null" >
+        #{param,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.Param" >
+    update param
+    <set >
+      <if test="goodid != null" >
+        goodId = #{goodid,jdbcType=VARCHAR},
+      </if>
+      <if test="param != null" >
+        param = #{param,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.highliving.pojo.Param" >
+    update param
+    set goodId = #{goodid,jdbcType=VARCHAR},
+      param = #{param,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.Param" >
+    update param
+    set goodId = #{goodid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findParamByGoodId" parameterType="java.lang.String" resultType="com.highliving.pojo.Param">
+    select * 
+    from param 
+    where goodId = #{goodid}
+  </select>
+  <update id="updateByGoodId" parameterType="com.highliving.pojo.Param" >
+  	update param
+    set param = #{param,jdbcType=LONGVARCHAR}
+    where goodid = #{goodid,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.GoodsTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.GoodsType" >
+    <id column="goodTypeId" property="goodtypeid" jdbcType="INTEGER" />
+    <result column="goodTypeName" property="goodtypename" jdbcType="VARCHAR" />
+    <result column="parent" property="parent" jdbcType="INTEGER" />
+    <result column="hasChildren" property="haschildren" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    goodTypeId, goodTypeName, parent, hasChildren
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from goodstype
+    where goodTypeId = #{goodtypeid,jdbcType=INTEGER}
+  </select>
+  <!-- 根据parent查类型 -->
+  <select id="selectByParent" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from goodstype
+    where parent = #{parent,jdbcType=INTEGER}
+  </select>
+  <!-- 根据hasChildren查是否为子节点 -->
+  <select id="selectByHasChildren" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from goodstype
+    where hasChildren = #{haschildren,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询子节点下面所有的商品 -->
+  <!--<select id="findGoodsById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select a.goodTypeId, a.goodTypeName, a.parent, a.hasChildren, b.* 
+  	from goodstype a left join goods b 
+  	on a.goodTypeId = b.goodTypeId 
+  	where a.goodTypeId = #{goodtypeid,jdbcType=INTEGER}
+  </select>  -->
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from goodstype
+    where goodTypeId = #{goodtypeid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.GoodsType" >
+    insert into goodstype (goodTypeId, goodTypeName, parent, 
+      hasChildren)
+    values (#{goodtypeid,jdbcType=INTEGER}, #{goodtypename,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER}, 
+      #{haschildren,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.GoodsType" >
+    insert into goodstype
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="goodtypeid != null" >
+        goodTypeId,
+      </if>
+      <if test="goodtypename != null" >
+        goodTypeName,
+      </if>
+      <if test="parent != null" >
+        parent,
+      </if>
+      <if test="haschildren != null" >
+        hasChildren,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="goodtypeid != null" >
+        #{goodtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="goodtypename != null" >
+        #{goodtypename,jdbcType=VARCHAR},
+      </if>
+      <if test="parent != null" >
+        #{parent,jdbcType=INTEGER},
+      </if>
+      <if test="haschildren != null" >
+        #{haschildren,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.GoodsType" >
+    update goodstype
+    <set >
+      <if test="goodtypename != null" >
+        goodTypeName = #{goodtypename,jdbcType=VARCHAR},
+      </if>
+      <if test="parent != null" >
+        parent = #{parent,jdbcType=INTEGER},
+      </if>
+      <if test="haschildren != null" >
+        hasChildren = #{haschildren,jdbcType=INTEGER},
+      </if>
+    </set>
+    where goodTypeId = #{goodtypeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.GoodsType" >
+    update goodstype
+    set goodTypeName = #{goodtypename,jdbcType=VARCHAR},
+      parent = #{parent,jdbcType=INTEGER},
+      hasChildren = #{haschildren,jdbcType=INTEGER}
+    where goodTypeId = #{goodtypeid,jdbcType=INTEGER}
+  </update>
+</mapper>

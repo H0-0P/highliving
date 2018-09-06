@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.PicturesMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.Pictures" >
+    <id column="picId" property="picid" jdbcType="INTEGER" />
+    <result column="goodId" property="goodid" jdbcType="VARCHAR" />
+    <result column="picPath" property="picpath" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    picId, goodId, picPath
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pictures
+    where picId = #{picid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pictures
+    where picId = #{picid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.Pictures" >
+    insert into pictures (picId, goodId, picPath
+      )
+    values (#{picid,jdbcType=INTEGER}, #{goodid,jdbcType=VARCHAR}, #{picpath,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.Pictures" >
+    insert into pictures
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="picid != null" >
+        picId,
+      </if>
+      <if test="goodid != null" >
+        goodId,
+      </if>
+      <if test="picpath != null" >
+        picPath,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="picid != null" >
+        #{picid,jdbcType=INTEGER},
+      </if>
+      <if test="goodid != null" >
+        #{goodid,jdbcType=VARCHAR},
+      </if>
+      <if test="picpath != null" >
+        #{picpath,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.Pictures" >
+    update pictures
+    <set >
+      <if test="goodid != null" >
+        goodId = #{goodid,jdbcType=VARCHAR},
+      </if>
+      <if test="picpath != null" >
+        picPath = #{picpath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where picId = #{picid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.Pictures" >
+    update pictures
+    set goodId = #{goodid,jdbcType=VARCHAR},
+      picPath = #{picpath,jdbcType=VARCHAR}
+    where picId = #{picid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findByPicsGoodId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from pictures
+    where goodId = #{goodId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deletePicByGoodId" parameterType="java.lang.String" >
+    delete from pictures
+    where goodId = #{goodId,jdbcType=VARCHAR}
+  </delete>
+  
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.NewsMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.News" >
+    <id column="newsId" property="newsid" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="newsCreateTime" property="newscreatetime" jdbcType="TIMESTAMP" />
+    <result column="newsTitle" property="newstitle" jdbcType="VARCHAR" />
+    <result column="newsPicPath" property="newspicpath" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.highliving.pojo.News" extends="BaseResultMap" >
+    <result column="newsInfo" property="newsinfo" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    newsId, userId, newsCreateTime, newsTitle, newsPicPath
+  </sql>
+  <sql id="Blob_Column_List" >
+    newsInfo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from news
+    where newsId = #{newsid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from news
+    where newsId = #{newsid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.News" >
+    insert into news (newsId, userId, newsCreateTime, 
+      newsTitle, newsPicPath, newsInfo
+      )
+    values (#{newsid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{newscreatetime,jdbcType=TIMESTAMP}, 
+      #{newstitle,jdbcType=VARCHAR}, #{newspicpath,jdbcType=VARCHAR}, #{newsinfo,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.News" >
+    insert into news
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="newsid != null" >
+        newsId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="newscreatetime != null" >
+        newsCreateTime,
+      </if>
+      <if test="newstitle != null" >
+        newsTitle,
+      </if>
+      <if test="newspicpath != null" >
+        newsPicPath,
+      </if>
+      <if test="newsinfo != null" >
+        newsInfo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="newsid != null" >
+        #{newsid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="newscreatetime != null" >
+        #{newscreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newstitle != null" >
+        #{newstitle,jdbcType=VARCHAR},
+      </if>
+      <if test="newspicpath != null" >
+        #{newspicpath,jdbcType=VARCHAR},
+      </if>
+      <if test="newsinfo != null" >
+        #{newsinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.News" >
+    update news
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="newscreatetime != null" >
+        newsCreateTime = #{newscreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newstitle != null" >
+        newsTitle = #{newstitle,jdbcType=VARCHAR},
+      </if>
+      <if test="newspicpath != null" >
+        newsPicPath = #{newspicpath,jdbcType=VARCHAR},
+      </if>
+      <if test="newsinfo != null" >
+        newsInfo = #{newsinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where newsId = #{newsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.highliving.pojo.News" >
+    update news
+    set userId = #{userid,jdbcType=INTEGER},
+      newsCreateTime = #{newscreatetime,jdbcType=TIMESTAMP},
+      newsTitle = #{newstitle,jdbcType=VARCHAR},
+      newsPicPath = #{newspicpath,jdbcType=VARCHAR},
+      newsInfo = #{newsinfo,jdbcType=LONGVARCHAR}
+    where newsId = #{newsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.News" >
+    update news
+    set userId = #{userid,jdbcType=INTEGER},
+      newsCreateTime = #{newscreatetime,jdbcType=TIMESTAMP},
+      newsTitle = #{newstitle,jdbcType=VARCHAR},
+      newsPicPath = #{newspicpath,jdbcType=VARCHAR}
+    where newsId = #{newsid,jdbcType=INTEGER}
+  </update>
+  <select id="findAll" resultMap="ResultMapWithBLOBs">
+  	select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from news
+  </select>
+  <select id="findLastestNews" resultMap="ResultMapWithBLOBs">
+  	select  
+  	<include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from news
+    order by newsCreateTime desc limit 10
+  </select>
+</mapper>

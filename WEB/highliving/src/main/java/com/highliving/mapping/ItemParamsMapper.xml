@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.ItemParamsMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.ItemParams" >
+    <id column="itemId" property="itemid" jdbcType="INTEGER" />
+    <result column="itemParams" property="itemparams" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    itemId, itemParams
+  </sql>
+  <select id="selectByIdAndParam" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from itemparams
+    where itemId = #{0}
+    	  and itemParams = #{1};
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from itemparams
+    where itemId = #{itemid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from itemparams
+    where itemId = #{itemid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.ItemParams" >
+    insert into itemparams (itemId, itemParams)
+    values (#{itemid,jdbcType=INTEGER}, #{itemparams,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.ItemParams" >
+    insert into itemparams
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemid != null" >
+        itemId,
+      </if>
+      <if test="itemparams != null" >
+        itemParams,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemid != null" >
+        #{itemid,jdbcType=INTEGER},
+      </if>
+      <if test="itemparams != null" >
+        #{itemparams,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.ItemParams" >
+    update itemparams
+    <set >
+      <if test="itemparams != null" >
+        itemParams = #{itemparams,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where itemId = #{itemid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.ItemParams" >
+    update itemparams
+    set itemParams = #{itemparams,jdbcType=VARCHAR}
+    where itemId = #{itemid,jdbcType=INTEGER}
+  </update>
+</mapper>

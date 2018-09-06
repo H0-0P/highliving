@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.UserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.UserInfo" >
+    <id column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="userType" property="usertype" jdbcType="INTEGER" />
+    <result column="loginName" property="loginname" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="isValid" property="isvalid" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    userId, userType, loginName, password, userName, phone, createTime, score, isValid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from userinfo
+    where userId = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from userinfo
+    where userId = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.UserInfo" >
+    insert into userinfo (userId, userType, loginName, 
+      password, userName, phone, 
+      createTime, score, isValid
+      )
+    values (#{userid,jdbcType=INTEGER}, #{usertype,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{score,jdbcType=INTEGER}, #{isvalid,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.UserInfo" >
+    insert into userinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="usertype != null" >
+        userType,
+      </if>
+      <if test="loginname != null" >
+        loginName,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="username != null" >
+        userName,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="isvalid != null" >
+        isValid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="usertype != null" >
+        #{usertype,jdbcType=INTEGER},
+      </if>
+      <if test="loginname != null" >
+        #{loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="isvalid != null" >
+        #{isvalid,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.UserInfo" >
+    update userinfo
+    <set >
+      <if test="usertype != null" >
+        userType = #{usertype,jdbcType=INTEGER},
+      </if>
+      <if test="loginname != null" >
+        loginName = #{loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="isvalid != null" >
+        isValid = #{isvalid,jdbcType=BIT},
+      </if>
+    </set>
+    where userId = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.UserInfo" >
+    update userinfo
+    set userType = #{usertype,jdbcType=INTEGER},
+      loginName = #{loginname,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      userName = #{username,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      score = #{score,jdbcType=INTEGER},
+      isValid = #{isvalid,jdbcType=BIT}
+    where userId = #{userid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findUserByLoginName" parameterType="String" resultType="com.highliving.pojo.UserInfo">
+  	select * from userInfo where loginName=#{loginName}
+  </select>
+  <select id="findByPhone" parameterType="String" resultType="com.highliving.pojo.UserInfo">
+  	select * from userInfo where phone=#{phone}
+  </select>
+  
+</mapper>

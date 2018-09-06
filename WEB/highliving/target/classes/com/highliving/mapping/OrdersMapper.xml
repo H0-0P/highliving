@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.OrdersMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.Orders" >
+    <id column="orderId" property="orderid" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="addressId" property="addressid" jdbcType="INTEGER" />
+    <result column="orderSum" property="ordersum" jdbcType="DECIMAL" />
+    <result column="orderState" property="orderstate" jdbcType="INTEGER" />
+    <result column="orderCreateDate" property="ordercreatedate" jdbcType="TIMESTAMP" />
+    <collection property="orderitems"  column="orderItemId"
+    	ofType="com.highliving.pojo.OrderItems">
+    	<id column="orderItemId" property="orderitemid" jdbcType="INTEGER" />
+    	<result column="goodId" property="goodid" jdbcType="VARCHAR" />
+    	<result column="orderId" property="orderid" jdbcType="INTEGER" />
+    	<result column="goodNum" property="goodnum" jdbcType="INTEGER" />
+    	<result column="orderItemSum" property="orderitemsum" jdbcType="DECIMAL" />
+    </collection>
+  </resultMap>
+  <resultMap id="ResultMap" type="com.highliving.pojo.Orders" >
+    <id column="orderId" property="orderid" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="addressId" property="addressid" jdbcType="INTEGER" />
+    <result column="orderSum" property="ordersum" jdbcType="DECIMAL" />
+    <result column="orderState" property="orderstate" jdbcType="INTEGER" />
+    <result column="orderCreateDate" property="ordercreatedate" jdbcType="TIMESTAMP" />
+    <collection property="orderitems"  column="orderItemId"
+    	ofType="com.highliving.pojo.OrderItems">
+    	<id column="orderItemId" property="orderitemid" jdbcType="INTEGER" />
+    	<result column="goodId" property="goodid" jdbcType="VARCHAR" />
+    	<result column="orderId" property="orderid" jdbcType="INTEGER" />
+    	<result column="goodNum" property="goodnum" jdbcType="INTEGER" />
+    	<result column="orderItemSum" property="orderitemsum" jdbcType="DECIMAL" />
+    	<collection property="goods" column="goodId"
+    		ofType="com.highliving.pojo.Goods">
+    		<id column="goodId" property="goodid" jdbcType="VARCHAR" />
+    		<result column="goodTypeId" property="goodtypeid" jdbcType="INTEGER" />
+    		<result column="brandId" property="brandid" jdbcType="INTEGER" />
+   			<result column="userId" property="userid" jdbcType="INTEGER" />
+    		<result column="goodName" property="goodname" jdbcType="VARCHAR" />
+    		<result column="goodPrice" property="goodprice" jdbcType="DECIMAL" />
+    		<result column="goodStatus" property="goodstatus" jdbcType="BIT" />
+    		<result column="isValid" property="isvalid" jdbcType="BIT" />
+    		<result column="goodCollect" property="goodcollect" jdbcType="INTEGER" />
+    		<result column="defaultPic" property="defaultpic" jdbcType="VARCHAR" />
+    		<result column="goodStore" property="goodstore" jdbcType="INTEGER" />
+    		<result column="goodDiscount" property="gooddiscount" jdbcType="DECIMAL" />
+    		<result column="goodCreateTime" property="goodcreatetime" jdbcType="TIMESTAMP" />
+    	</collection>
+    </collection>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    orderId, userId, addressId, orderSum, orderState, orderCreateDate
+  </sql>
+  
+  <insert id="insert" parameterType="com.highliving.pojo.Orders" 
+  	useGeneratedKeys="true" keyColumn="orderid" keyProperty="orderid">
+    insert into orders (userId, addressId, 
+      orderSum, orderState, ordercreatedate)
+    values (#{userid,jdbcType=INTEGER}, #{addressid,jdbcType=INTEGER}, 
+      #{ordersum,jdbcType=DECIMAL}, #{orderstate,jdbcType=INTEGER}, #{ordercreatedate,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <!-- 根据订单查详细订单项 -->
+  <select id="selectItemsByOrderId" resultMap="ResultMap" parameterType = "java.lang.Integer" >
+	<!-- select 
+    a.orderId, a.addressId, a.orderSum, a.orderState, a.orderCreateDate, b.goodId, b.goodNum, b.orderItemSum
+    from orders a left join orderitems b on a.orderId = b.orderId
+    where a.orderId = #{orderid,jdbcType=INTEGER} -->
+    select 
+    a.orderId, a.userid, a.addressId, a.orderSum, a.orderState, a.orderCreateDate, b.orderitemid, b.goodId, b.goodNum, b.orderItemSum,
+    c.goodName, c.defaultPic, c.goodPrice
+    from orders a 
+    inner join orderitems b on a.orderId = b.orderId
+    inner join goods c on b.goodId = c.goodId
+    where a.orderId = #{orderid}
+  </select>
+  
+  <!-- 根据订单id和订单状态查订单项 -->
+  <select id="selectOrderByUserIdAndState" resultMap="ResultMap" >
+    <!-- select *
+    from orders 
+    where userId = #{0} and orderState = #{1} -->
+    select 
+    a.orderId, a.userid, a.addressId, a.orderSum, a.orderState, a.orderCreateDate, b.orderitemid, b.goodId, b.goodNum, b.orderItemSum,
+    c.goodName, c.defaultPic, c.goodPrice
+    from orders a 
+    left join orderitems b on a.orderId = b.orderId
+    left join goods c on b.goodId = c.goodId
+    where a.userId = #{0} and a.orderState = #{1}
+    order by a.orderId asc
+  </select>
+  
+  <!-- 根据userid查订单 -->
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where userId = #{userid,jdbcType=INTEGER}
+  </select>
+  <!-- 根据订单状态查订单 -->
+  <select id="selectByOrderState" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where orderState = #{orderstate,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where orderId = #{orderid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from orders
+    where orderId = #{orderid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.Orders" >
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderid != null" >
+        orderId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="addressid != null" >
+        addressId,
+      </if>
+      <if test="ordersum != null" >
+        orderSum,
+      </if>
+      <if test="orderstate != null" >
+        orderState,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderid != null" >
+        #{orderid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="addressid != null" >
+        #{addressid,jdbcType=INTEGER},
+      </if>
+      <if test="ordersum != null" >
+        #{ordersum,jdbcType=DECIMAL},
+      </if>
+      <if test="orderstate != null" >
+        #{orderstate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.Orders" >
+    update orders
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="addressid != null" >
+        addressId = #{addressid,jdbcType=INTEGER},
+      </if>
+      <if test="ordersum != null" >
+        orderSum = #{ordersum,jdbcType=DECIMAL},
+      </if>
+      <if test="orderstate != null" >
+        orderState = #{orderstate,jdbcType=INTEGER},
+      </if>
+    </set>
+    where orderId = #{orderid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.Orders" >
+    update orders
+    set userId = #{userid,jdbcType=INTEGER},
+      addressId = #{addressid,jdbcType=INTEGER},
+      orderSum = #{ordersum,jdbcType=DECIMAL},
+      orderState = #{orderstate,jdbcType=INTEGER}
+    where orderId = #{orderid,jdbcType=INTEGER}
+  </update>
+</mapper>

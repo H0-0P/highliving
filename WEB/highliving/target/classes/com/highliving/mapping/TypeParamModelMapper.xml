@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.TypeParamModelMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.TypeParamModel" >
+    <id column="modelId" property="modelid" jdbcType="INTEGER" />
+    <result column="goodTypeId" property="goodtypeid" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.highliving.pojo.TypeParamModel" extends="BaseResultMap" >
+    <result column="paramData" property="paramdata" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    modelId, goodTypeId
+  </sql>
+  <sql id="Blob_Column_List" >
+    paramData
+  </sql>
+   
+   <!-- 查找所有类型表 -->
+  <select id="selectAll" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from typeparammodel
+   </select>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from typeparammodel
+    where modelId = #{modelid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from typeparammodel
+    where modelId = #{modelid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.TypeParamModel" >
+    insert into typeparammodel (modelId, goodTypeId, paramData
+      )
+    values (#{modelid,jdbcType=INTEGER}, #{goodtypeid,jdbcType=INTEGER}, #{paramdata,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.TypeParamModel" >
+    insert into typeparammodel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="modelid != null" >
+        modelId,
+      </if>
+      <if test="goodtypeid != null" >
+        goodTypeId,
+      </if>
+      <if test="paramdata != null" >
+        paramData,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="modelid != null" >
+        #{modelid,jdbcType=INTEGER},
+      </if>
+      <if test="goodtypeid != null" >
+        #{goodtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="paramdata != null" >
+        #{paramdata,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.TypeParamModel" >
+    update typeparammodel
+    <set >
+      <if test="goodtypeid != null" >
+        goodTypeId = #{goodtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="paramdata != null" >
+        paramData = #{paramdata,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where modelId = #{modelid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.highliving.pojo.TypeParamModel" >
+    update typeparammodel
+    set goodTypeId = #{goodtypeid,jdbcType=INTEGER},
+      paramData = #{paramdata,jdbcType=LONGVARCHAR}
+    where modelId = #{modelid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.TypeParamModel" >
+    update typeparammodel
+    set goodTypeId = #{goodtypeid,jdbcType=INTEGER}
+    where modelId = #{modelid,jdbcType=INTEGER}
+  </update>
+  
+  
+  <select id="findParamByTypeId" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" /> 
+    from typeparammodel
+    where goodTypeId = #{goodTypeId}
+  </select>
+  <update id="updateByTypeId" parameterType="com.highliving.pojo.TypeParamModel" >
+  	update typeparammodel
+    set paramdata = #{paramdata}
+    where goodTypeId = #{goodTypeId}
+  </update>
+  
+</mapper>

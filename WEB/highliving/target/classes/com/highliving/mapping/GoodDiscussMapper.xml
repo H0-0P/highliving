@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.GoodDiscussMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.GoodDiscuss" >
+    <id column="discussId" property="discussid" jdbcType="INTEGER" />
+    <result column="goodId" property="goodid" jdbcType="VARCHAR" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="discussInfo" property="discussinfo" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <!--  <collection property="goods" javaType="com.highliving.pojo.Goods">
+    	<id column="goodId" property="goodid" jdbcType="VARCHAR" />
+	    <result column="goodTypeId" property="goodtypeid" jdbcType="INTEGER" />
+	    <result column="brandId" property="brandid" jdbcType="INTEGER" />
+	    <result column="userId" property="userid" jdbcType="INTEGER" /> 
+	    <result column="goodName" property="goodname" jdbcType="VARCHAR" />
+	    <result column="goodPrice" property="goodprice" jdbcType="DECIMAL" />
+	    <result column="goodStatus" property="goodstatus" jdbcType="BIT" />
+	    <result column="isValid" property="isvalid" jdbcType="BIT" />
+	    <result column="goodCollect" property="goodcollect" jdbcType="INTEGER" />
+	    <result column="defaultPic" property="defaultpic" jdbcType="VARCHAR" />
+	    <result column="goodStore" property="goodstore" jdbcType="INTEGER" />
+	    <result column="goodDiscount" property="gooddiscount" jdbcType="DECIMAL" />
+	    <result column="goodCreateTime" property="goodcreatetime" jdbcType="TIMESTAMP" />
+    </collection>
+    <collection property="userinfo" javaType="com.highliving.pojo.UserInfo">
+	    <id column="userId" property="userid" jdbcType="INTEGER" />
+	    <result column="userType" property="usertype" jdbcType="INTEGER" />
+	    <result column="loginName" property="loginname" jdbcType="VARCHAR" />
+	    <result column="password" property="password" jdbcType="VARCHAR" />
+	    <result column="userName" property="username" jdbcType="VARCHAR" />
+	    <result column="phone" property="phone" jdbcType="VARCHAR" />
+	    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+	    <result column="score" property="score" jdbcType="INTEGER" />
+	    <result column="isValid" property="isvalid" jdbcType="BIT" />
+    </collection>-->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    discussId, goodId, userId, discussInfo, score, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gooddiscuss
+    where discussId = #{discussid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gooddiscuss
+    where discussId = #{discussid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.GoodDiscuss" >
+    insert into gooddiscuss (discussId, goodId, userId, 
+      discussInfo, score, createTime
+      )
+    values (#{discussid,jdbcType=INTEGER}, #{goodid,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
+      #{discussinfo,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.GoodDiscuss" >
+    insert into gooddiscuss
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="discussid != null" >
+        discussId,
+      </if>
+      <if test="goodid != null" >
+        goodId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="discussinfo != null" >
+        discussInfo,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="discussid != null" >
+        #{discussid,jdbcType=INTEGER},
+      </if>
+      <if test="goodid != null" >
+        #{goodid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="discussinfo != null" >
+        #{discussinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.GoodDiscuss" >
+    update gooddiscuss
+    <set >
+      <if test="goodid != null" >
+        goodId = #{goodid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="discussinfo != null" >
+        discussInfo = #{discussinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where discussId = #{discussid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.GoodDiscuss" >
+    update gooddiscuss
+    set goodId = #{goodid,jdbcType=VARCHAR},
+      userId = #{userid,jdbcType=INTEGER},
+      discussInfo = #{discussinfo,jdbcType=VARCHAR},
+      score = #{score,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where discussId = #{discussid,jdbcType=INTEGER}
+  </update>
+  <select id="findByGoodId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gooddiscuss
+    where goodId = #{goodid,jdbcType=VARCHAR}
+  </select>
+   <select id="findByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gooddiscuss
+    where userId = #{userid,jdbcType=INTEGER}
+  </select>
+  <!-- <select id="findAllInfoByGoodId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    a.discussId,a.goodId,a.userId,a.discussInfo,a.score,a.createTime,c.userName,c.userId
+    from gooddiscuss a  inner join userinfo c
+    on  a.userId = c.userId
+    where a.goodId = #{goodid,jdbcType=VARCHAR} 
+  </select>-->
+  <!--根据商品id查询总分  -->
+  <select id="findSumScoreByGoodId" resultType="java.lang.Integer" parameterType="java.lang.String">
+  	select sum(score) from gooddiscuss where goodId = #{goodid,jdbcType=VARCHAR} 
+  </select>
+    <!--   根据商品id查询评价人数  -->
+   <select id="findCountUserByGoodId" resultType="java.lang.Integer" parameterType="java.lang.String">
+  	select count(userId) from gooddiscuss where goodId = #{goodid,jdbcType=VARCHAR} 
+  </select>
+</mapper>

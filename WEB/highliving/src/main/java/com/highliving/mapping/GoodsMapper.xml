@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.Goods" >
+    <id column="goodId" property="goodid" jdbcType="VARCHAR" />
+    <result column="goodTypeId" property="goodtypeid" jdbcType="INTEGER" />
+    <result column="brandId" property="brandid" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="goodName" property="goodname" jdbcType="VARCHAR" />
+    <result column="goodPrice" property="goodprice" jdbcType="DECIMAL" />
+    <result column="goodStatus" property="goodstatus" jdbcType="BIT" />
+    <result column="isValid" property="isvalid" jdbcType="BIT" />
+    <result column="goodCollect" property="goodcollect" jdbcType="INTEGER" />
+    <result column="defaultPic" property="defaultpic" jdbcType="VARCHAR" />
+    <result column="goodStore" property="goodstore" jdbcType="INTEGER" />
+    <result column="goodDiscount" property="gooddiscount" jdbcType="DECIMAL" />
+    <result column="goodCreateTime" property="goodcreatetime" jdbcType="TIMESTAMP" />
+    <collection property="pictures" column="picId"
+		ofType="com.highliving.pojo.Pictures">
+		<id column="picId" property="picid" jdbcType="INTEGER" />
+    	<result column="goodId" property="goodid" jdbcType="VARCHAR" />
+   		<result column="picPath" property="picpath" jdbcType="VARCHAR" />
+	</collection>	
+  </resultMap>
+  <sql id="Base_Column_List" >
+    goodId, goodTypeId, brandId, userId, goodName, goodPrice, goodStatus, isValid, goodCollect, 
+    defaultPic, goodStore, goodDiscount, goodCreateTime
+  </sql>
+  
+   <select id="selectPicByGoodId" resultMap="BaseResultMap" parameterType = "java.lang.String" >
+    select 
+    a.*,b.picId, b.picPath
+    from goods a left join pictures b on a.goodId = b.goodId
+    where a.goodId = #{goodid,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByGoodName2" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where goodName like concat('%',#{goodname,jdbcType=VARCHAR},'%')
+  </select>
+  
+  <select id="findAll" resultMap="BaseResultMap">
+  	select *
+    from goods
+  </select>
+  
+  <!-- userid查 -->
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where userId = #{userid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据typeid查所有商品 -->
+  <select id="selectByGoodTypeId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where goodTypeId = #{goodtypeid,jdbcType=INTEGER}
+  </select>
+  <!-- 根据goodname模糊查询 --> 
+  <select id="selectByGoodName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where goodName like concat(#{goodname,jdbcType=VARCHAR},'%') limit 10
+  </select>
+  <!--  SELECT `column` FROM `table` WHERE `field` like '%keyword%' -->
+  <!-- 根据品牌Id查询所有商品 -->
+  <select id="selectByBrandId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where brandId = #{brandid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where goodId = #{goodid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from goods
+    where goodId = #{goodid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.Goods" >
+    insert into goods (goodId, goodTypeId, brandId, 
+      userId, goodName, goodPrice, 
+      goodStatus, isValid, goodCollect, 
+      defaultPic, goodStore, goodDiscount, 
+      goodCreateTime)
+    values (#{goodid,jdbcType=VARCHAR}, #{goodtypeid,jdbcType=INTEGER}, #{brandid,jdbcType=INTEGER}, 
+      #{userid,jdbcType=INTEGER}, #{goodname,jdbcType=VARCHAR}, #{goodprice,jdbcType=DECIMAL}, 
+      #{goodstatus,jdbcType=BIT}, #{isvalid,jdbcType=BIT}, #{goodcollect,jdbcType=INTEGER}, 
+      #{defaultpic,jdbcType=VARCHAR}, #{goodstore,jdbcType=INTEGER}, #{gooddiscount,jdbcType=DECIMAL}, 
+      #{goodcreatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.Goods" >
+    insert into goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="goodid != null" >
+        goodId,
+      </if>
+      <if test="goodtypeid != null" >
+        goodTypeId,
+      </if>
+      <if test="brandid != null" >
+        brandId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="goodname != null" >
+        goodName,
+      </if>
+      <if test="goodprice != null" >
+        goodPrice,
+      </if>
+      <if test="goodstatus != null" >
+        goodStatus,
+      </if>
+      <if test="isvalid != null" >
+        isValid,
+      </if>
+      <if test="goodcollect != null" >
+        goodCollect,
+      </if>
+      <if test="defaultpic != null" >
+        defaultPic,
+      </if>
+      <if test="goodstore != null" >
+        goodStore,
+      </if>
+      <if test="gooddiscount != null" >
+        goodDiscount,
+      </if>
+      <if test="goodcreatetime != null" >
+        goodCreateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="goodid != null" >
+        #{goodid,jdbcType=VARCHAR},
+      </if>
+      <if test="goodtypeid != null" >
+        #{goodtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="brandid != null" >
+        #{brandid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="goodname != null" >
+        #{goodname,jdbcType=VARCHAR},
+      </if>
+      <if test="goodprice != null" >
+        #{goodprice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodstatus != null" >
+        #{goodstatus,jdbcType=BIT},
+      </if>
+      <if test="isvalid != null" >
+        #{isvalid,jdbcType=BIT},
+      </if>
+      <if test="goodcollect != null" >
+        #{goodcollect,jdbcType=INTEGER},
+      </if>
+      <if test="defaultpic != null" >
+        #{defaultpic,jdbcType=VARCHAR},
+      </if>
+      <if test="goodstore != null" >
+        #{goodstore,jdbcType=INTEGER},
+      </if>
+      <if test="gooddiscount != null" >
+        #{gooddiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="goodcreatetime != null" >
+        #{goodcreatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.Goods" >
+    update goods
+    <set >
+      <if test="goodtypeid != null" >
+        goodTypeId = #{goodtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="brandid != null" >
+        brandId = #{brandid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="goodname != null" >
+        goodName = #{goodname,jdbcType=VARCHAR},
+      </if>
+      <if test="goodprice != null" >
+        goodPrice = #{goodprice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodstatus != null" >
+        goodStatus = #{goodstatus,jdbcType=BIT},
+      </if>
+      <if test="isvalid != null" >
+        isValid = #{isvalid,jdbcType=BIT},
+      </if>
+      <if test="goodcollect != null" >
+        goodCollect = #{goodcollect,jdbcType=INTEGER},
+      </if>
+      <if test="defaultpic != null" >
+        defaultPic = #{defaultpic,jdbcType=VARCHAR},
+      </if>
+      <if test="goodstore != null" >
+        goodStore = #{goodstore,jdbcType=INTEGER},
+      </if>
+      <if test="gooddiscount != null" >
+        goodDiscount = #{gooddiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="goodcreatetime != null" >
+        goodCreateTime = #{goodcreatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where goodId = #{goodid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.Goods" >
+    update goods
+    set goodTypeId = #{goodtypeid,jdbcType=INTEGER},
+      brandId = #{brandid,jdbcType=INTEGER},
+      userId = #{userid,jdbcType=INTEGER},
+      goodName = #{goodname,jdbcType=VARCHAR},
+      goodPrice = #{goodprice,jdbcType=DECIMAL},
+      goodStatus = #{goodstatus,jdbcType=BIT},
+      isValid = #{isvalid,jdbcType=BIT},
+      goodCollect = #{goodcollect,jdbcType=INTEGER},
+      defaultPic = #{defaultpic,jdbcType=VARCHAR},
+      goodStore = #{goodstore,jdbcType=INTEGER},
+      goodDiscount = #{gooddiscount,jdbcType=DECIMAL},
+      goodCreateTime = #{goodcreatetime,jdbcType=TIMESTAMP}
+    where goodId = #{goodid,jdbcType=VARCHAR}
+  </update>
+</mapper>

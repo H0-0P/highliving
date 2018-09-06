@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.GoodBrandMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.GoodBrand" >
+    <id column="brandId" property="brandid" jdbcType="INTEGER" />
+    <result column="brandName" property="brandname" jdbcType="VARCHAR" />
+    <result column="brandLogoPath" property="brandlogopath" jdbcType="VARCHAR" />
+    <collection property="goods" ofType="com.highliving.pojo.Goods">
+    	 <id column="goodId" property="goodid" jdbcType="VARCHAR" />
+	    <result column="goodTypeId" property="goodtypeid" jdbcType="INTEGER" />
+	    <result column="brandId" property="brandid" jdbcType="INTEGER" />
+	    <result column="userId" property="userid" jdbcType="INTEGER" /> 
+	    <result column="goodName" property="goodname" jdbcType="VARCHAR" />
+	    <result column="goodPrice" property="goodprice" jdbcType="DECIMAL" />
+	    <result column="goodStatus" property="goodstatus" jdbcType="BIT" />
+	    <result column="isValid" property="isvalid" jdbcType="BIT" />
+	    <result column="goodCollect" property="goodcollect" jdbcType="INTEGER" />
+	    <result column="defaultPic" property="defaultpic" jdbcType="VARCHAR" />
+	    <result column="goodStore" property="goodstore" jdbcType="INTEGER" />
+	    <result column="goodDiscount" property="gooddiscount" jdbcType="DECIMAL" />
+	    <result column="goodCreateTime" property="goodcreatetime" jdbcType="TIMESTAMP" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    brandId, brandName, brandLogoPath
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from goodbrand
+    where brandId = #{brandid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from goodbrand
+    where brandId = #{brandid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.GoodBrand" >
+    insert into goodbrand (brandId, brandName, brandLogoPath
+      )
+    values (#{brandid,jdbcType=INTEGER}, #{brandname,jdbcType=VARCHAR}, #{brandlogopath,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.GoodBrand" >
+    insert into goodbrand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="brandid != null" >
+        brandId,
+      </if>
+      <if test="brandname != null" >
+        brandName,
+      </if>
+      <if test="brandlogopath != null" >
+        brandLogoPath,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="brandid != null" >
+        #{brandid,jdbcType=INTEGER},
+      </if>
+      <if test="brandname != null" >
+        #{brandname,jdbcType=VARCHAR},
+      </if>
+      <if test="brandlogopath != null" >
+        #{brandlogopath,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.GoodBrand" >
+    update goodbrand
+    <set >
+      <if test="brandname != null" >
+        brandName = #{brandname,jdbcType=VARCHAR},
+      </if>
+      <if test="brandlogopath != null" >
+        brandLogoPath = #{brandlogopath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where brandId = #{brandid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.GoodBrand" >
+    update goodbrand
+    set brandName = #{brandname,jdbcType=VARCHAR},
+      brandLogoPath = #{brandlogopath,jdbcType=VARCHAR}
+    where brandId = #{brandid,jdbcType=INTEGER}
+  </update>
+  <select id="findBrandInfo" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from goodbrand
+  </select>
+  
+ <!-- 连查商品 -->
+ <select id="findWithGoodsById" resultMap="BaseResultMap">
+ 	select a.*,b.goodId,b.goodName,b.defaultPic,b.goodPrice from goodbrand a left join goods b on a.brandId = b.brandId where a.brandId=#{brandid,jdbcType=INTEGER}
+ </select>
+</mapper>

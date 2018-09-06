@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.highliving.dao.OrderItemsMapper" >
+  <resultMap id="BaseResultMap" type="com.highliving.pojo.OrderItems" >
+    <id column="orderItemId" property="orderitemid" jdbcType="INTEGER" />
+    <result column="goodId" property="goodid" jdbcType="VARCHAR" />
+    <result column="orderId" property="orderid" jdbcType="INTEGER" />
+    <result column="goodNum" property="goodnum" jdbcType="INTEGER" />
+    <result column="orderItemSum" property="orderitemsum" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    orderItemId, goodId, orderId, goodNum, orderItemSum
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from orderitems
+    where orderItemId = #{orderitemid,jdbcType=INTEGER}
+  </select>
+  <select id="findItemsByOrderId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select *
+  	from orderitems
+  	where orderid = #{orderid}
+  </select>
+  <select id="findItemsByGoodId" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select *
+  	from orderitems
+  	where goodId = #{goodid}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from orderitems
+    where orderItemId = #{orderitemid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.highliving.pojo.OrderItems" 
+ 	 useGeneratedKeys="true" keyColumn="orderitemid" keyProperty="orderitemid">
+    insert into orderitems (goodId, orderId, 
+      goodNum, orderItemSum)
+    values (#{goodid,jdbcType=VARCHAR}, #{orderid,jdbcType=INTEGER}, 
+      #{goodnum,jdbcType=INTEGER}, #{orderitemsum,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.highliving.pojo.OrderItems" >
+    insert into orderitems
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderitemid != null" >
+        orderItemId,
+      </if>
+      <if test="goodid != null" >
+        goodId,
+      </if>
+      <if test="orderid != null" >
+        orderId,
+      </if>
+      <if test="goodnum != null" >
+        goodNum,
+      </if>
+      <if test="orderitemsum != null" >
+        orderItemSum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderitemid != null" >
+        #{orderitemid,jdbcType=INTEGER},
+      </if>
+      <if test="goodid != null" >
+        #{goodid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=INTEGER},
+      </if>
+      <if test="goodnum != null" >
+        #{goodnum,jdbcType=INTEGER},
+      </if>
+      <if test="orderitemsum != null" >
+        #{orderitemsum,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.highliving.pojo.OrderItems" >
+    update orderitems
+    <set >
+      <if test="goodid != null" >
+        goodId = #{goodid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderid != null" >
+        orderId = #{orderid,jdbcType=INTEGER},
+      </if>
+      <if test="goodnum != null" >
+        goodNum = #{goodnum,jdbcType=INTEGER},
+      </if>
+      <if test="orderitemsum != null" >
+        orderItemSum = #{orderitemsum,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where orderItemId = #{orderitemid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.highliving.pojo.OrderItems" >
+    update orderitems
+    set goodId = #{goodid,jdbcType=VARCHAR},
+      orderId = #{orderid,jdbcType=INTEGER},
+      goodNum = #{goodnum,jdbcType=INTEGER},
+      orderItemSum = #{orderitemsum,jdbcType=DECIMAL}
+    where orderItemId = #{orderitemid,jdbcType=INTEGER}
+  </update>
+</mapper>
